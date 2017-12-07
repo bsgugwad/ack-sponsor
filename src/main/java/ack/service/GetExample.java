@@ -17,35 +17,16 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-/**
- * Example: Amazon ElasticSearch service get record.
- *
- * @author javaQuery
- * @date 14th January, 2016
- * @Github: https://github.com/javaquery/Examples
- */
 public class GetExample {
 
     public static void main(String[] args) {
-        /**
-         * Amazon ElasticSearch Service URL:
-         * endpoint + / + {index_name} + / + {type} + / + {id}
-         */
-        //String elastic_search_url = "http://xxxxx-yyyyy-r6nvlhpscgdwms5.ap-northeast-1.es.amazonaws.com/inventory/simple/123";
 
         String elastic_search_url = "https://search-awselasticsearch-ztwnkdiuuxp3yujo6otxasffiu.us-west-1.es.amazonaws.com/ack/_search?q=123456";
 
-        /* Prepare get request */
         HttpGet httpGet = new HttpGet(elastic_search_url);
-        /* Execute get request */
         httpGetRequest(httpGet);
     }
 
-    /**
-     * Perform get request.
-     *
-     * @param httpGet
-     */
     public static List<AckSponsor> httpGetRequest(HttpGet httpGet) {
         String strResponse = null;
         /* Create object of CloseableHttpClient */
@@ -76,11 +57,13 @@ public class GetExample {
             /* Execute URL and attach after execution response handler */
             HttpResponse response = httpClient.execute(httpGet);
             /* Print the response */
-            strResponse =  EntityUtils.toString(response.getEntity());
+            strResponse = EntityUtils.toString(response.getEntity());
 
-         SearchResponse searchResponse =  objectMapper.readValue(strResponse, SearchResponse.class);
+            SearchResponse searchResponse = objectMapper.readValue(strResponse, SearchResponse.class);
 
-         searchResponse.getHits().getHits().forEach(hit->{result.add(hit.getSource());});
+            searchResponse.getHits().getHits().forEach(hit -> {
+                result.add(hit.getSource());
+            });
 
             System.out.println("new Response: " + response.getEntity().getContent());
         } catch (Exception e) {
